@@ -15,7 +15,7 @@ public class JavaApplication3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("show up in github please");
+        System.out.println("it is still working :)");
     }
     
 }
