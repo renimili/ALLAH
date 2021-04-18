@@ -27,28 +27,29 @@ public class InputHandler {
     private final EventHandler<KeyEvent> keyHandler;
     private final EventHandler<MouseEvent> mouseHandler;
     public InputHandler(World world) {
-        Snake snake = world.getSnake();
-        keyHandler = keyEvent -> {
-            // TODO: Implement controls
-            KeyCode keyCode = keyEvent.getCode();
+            Snake snake = world.getSnake();
+            keyHandler = keyEvent -> {
 
-        if (keyCode.equals(KeyCode.A)) {
-            snake.setDirection(Direction.LEFT);
-        };
-        if (keyCode.equals(KeyCode.D)) {
-            snake.setDirection(Direction.RIGHT);
-        };
-        if (keyCode.equals(KeyCode.W)) {
-            snake.setDirection(Direction.UP);
-        };
-        if (keyCode.equals(KeyCode.S)) {
-            snake.setDirection(Direction.DOWN);
-        };
-        };
-        mouseHandler = mouseEvent -> {
-            // TODO: Implement mouse
+                        KeyCode keyCode = keyEvent.getCode();
+                        if (keyCode.equals(KeyCode.A)) {
+                                snake.setDirection(snake.getDirection().rotateLeft());
+                        };
+                        if (keyCode.equals(KeyCode.D)) {
+                                snake.setDirection(snake.getDirection().rotateRight());
+                        };
+                        if (keyCode.equals(KeyCode.S)) {
+                                     world.flipPause();
+                        };
+            };
+            mouseHandler = mouseEvent -> {
+                // TODO: Implement mouse
+                double x = mouseEvent.getSceneX();
+                double y = mouseEvent.getSceneY();
+                int posX = (int) x/SnakeGame.SCALE;
+                int posY = (int) y/SnakeGame.SCALE;
 
-        };
+                world.getFood().moveTo(posX, posY);
+            };
     };
 
     public EventHandler<KeyEvent> getKeyHandler() {

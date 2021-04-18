@@ -29,6 +29,8 @@ public class World {
 
     private final BooleanProperty running = new SimpleBooleanProperty(false);
 
+    private final BooleanProperty paused = new SimpleBooleanProperty(false);
+
     private final IntegerProperty score = new SimpleIntegerProperty(0);
 
     public World(int size) {
@@ -37,18 +39,28 @@ public class World {
         snake = new Snake(size / 2, size / 2, this);
         food = new Food();
 
-        // TODO: Implement timeline
-        running.set(true);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DELAY), e -> {
-            if(running.get()){
-                snake.move();
-            }
-        }
-                )); 
-        timeline.setCycleCount(-1);
-        timeline.play();
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DELAY), e -> {
+                    snake.move();
+            })); 
+            timeline.setCycleCount(-1);
+            timeline.play();
+           this.paused.addListener( (observable, oldvalue, newvalue) ->{
+                    if (newvalue){
+                            timeline.play();
+                    } else {
+                            timeline.pause();
+                    }
+           });
+            paused.set(true);
+            
+           this.running.addListener( (observable, oldvalue, newvalue) ->{
+                    if (!newvalue){
+                            timeline.stop();
+                    }
+           });
+            running.set(true);
 
-        moveFoodRandomly();
+            moveFoodRandomly();
     }
 
     public void moveFoodRandomly() {
@@ -64,9 +76,9 @@ public class World {
     public void setRunning(boolean running) {
         this.running.set(running);
     }
-
-    public void setScore(int score) {
-        this.score.set(score);
+    
+    public void flipPause() {
+        this.paused.set(!this.paused.get());
     }
 
     public boolean isRunning() {
@@ -91,6 +103,10 @@ public class World {
 
     public BooleanProperty getRunningProperty() {
         return running;
+    }
+    
+    public BooleanProperty getPausedProperty() {
+        return paused;
     }
 
     public IntegerProperty getScoreProperty() {
